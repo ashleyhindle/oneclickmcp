@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\McpConfigRequest;
+use Illuminate\Support\Str;
 
 class McpController extends Controller
 {
@@ -16,6 +17,25 @@ class McpController extends Controller
     {
         $name = $request->validated()['name'];
         $url = $request->validated()['url'];
+
+        // Create slug from name
+        $nameSlug = Str::slug($name);
+
+        // URL encode for use in path (Laravel will handle this automatically)
+        // Redirect to the shareable install URL
+        return redirect()->route('install', [
+            'name' => $nameSlug,
+            'url' => $url
+        ]);
+    }
+
+    public function install(Request $request, string $name, string $url)
+    {
+        // URL is automatically decoded by Laravel
+        // Validate URL format
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            return redirect()->route('home')->withErrors(['url' => 'Invalid URL format']);
+        }
 
         // Generate configuration JSON
         $config = [

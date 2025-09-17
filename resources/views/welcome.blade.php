@@ -1,23 +1,29 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ config('app.name', 'Laravel') }}</title>
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] dark:text-[#EDEDEC] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
-        <div class="w-full lg:max-w-2xl max-w-[335px]">
+@extends('layouts.app')
+
+@section('title', 'Create MCP Setup Page')
+@section('description', 'Generate one-click installation links for your MCP server. Support for Cursor, VS Code, Claude Code, and more.')
+
+@section('content')
+        <div class="w-full lg:max-w-2xl">
+            <div class="text-center mb-8">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 mx-auto">
+                    <path d="M 13.045 47.331 L 50.659 12.066 L 50.496 71.367 M 30.009 49.633 L 86.955 49.597 L 53.774 87.934"
+                          fill="none"
+                          stroke-linecap="round"
+                          style="stroke-linejoin: bevel; transform-box: fill-box; transform-origin: 51.9085% 48.7322%; stroke-width: 10.5px;"
+                          class="stroke-blue-600 dark:stroke-blue-400">
+                    </path>
+                </svg>
+            </div>
+
             <header class="text-center mb-12">
-                <h1 class="text-4xl font-bold mb-4">One-Click MCP</h1>
+                <h1 class="text-4xl font-bold mb-4">Guided MCP Install</h1>
                 <p class="text-lg text-[#706f6c] dark:text-[#A1A09A]">
-                    Generate installation links for your MCP server across different IDEs and tools
+                    Generate installation instructions for your MCP server 
                 </p>
             </header>
 
-            <div class="bg-white dark:bg-[#161615] rounded-lg border border-[#e3e3e0] dark:border-[#3E3E3A] p-8 shadow-sm">
+            <div class="bg-white dark:bg-[#161615] rounded-xl border border-[#e3e3e0] dark:border-[#3E3E3A] p-8 shadow-sm">
                 <form action="{{ route('generate') }}" method="POST" class="space-y-6">
                     @csrf
 
@@ -31,7 +37,7 @@
                             name="name"
                             value="{{ old('name') }}"
                             placeholder="my-mcp-server"
-                            class="w-full px-4 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#1b1b18] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            class="w-full px-4 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#1b1b18] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-[#A1A09A]"
                             required
                         />
                         @error('name')
@@ -49,7 +55,7 @@
                             name="url"
                             value="{{ old('url') }}"
                             placeholder="https://your-server.com/mcp"
-                            class="w-full px-4 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#1b1b18] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            class="w-full px-4 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#1b1b18] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-[#A1A09A]"
                             required
                         />
                         @error('url')
@@ -59,7 +65,7 @@
 
                     <button
                         type="submit"
-                        class="w-full bg-[#1b1b18] dark:bg-[#eeeeec] text-white dark:text-[#1b1b18] py-3 px-6 rounded-lg hover:bg-black dark:hover:bg-white transition-colors font-medium"
+                        class="w-full bg-[#1b1b18] dark:bg-[#eeeeec] text-white dark:text-[#1b1b18] py-3 px-6 rounded-lg hover:bg-black dark:hover:bg-white transition-colors font-medium shadow-xs"
                     >
                         Generate Installation Links
                     </button>
@@ -87,6 +93,22 @@
                     </div>
                 </div>
             @endif
+
+            <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
+                <div class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="text-sm">
+                        <p class="text-blue-900 dark:text-blue-100 font-medium">Want to add AddMCP to your MCP client?</p>
+                        <p class="text-blue-700 dark:text-blue-300 mt-1">
+                            Get instant setup instructions for the AddMCP server itself.
+                            <a href="{{ url('/addmcp/https://addmcp.fyi/mcp') }}" class="underline hover:no-underline font-medium">
+                                Install AddMCP →
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </body>
-</html>
+@endsection

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export>
+      <bx:file format="png" path="addmcp-transparent-512.png" width="512" height="512" dpi="186"></bx:file>
+      <bx:file format="png" path="addmcp-white-512.png" width="512" height="512" background="#fff" dpi="400" antialiasing="false"></bx:file>
+      <bx:file format="png" path="addcmp-white-1024.png" width="1024" height="1024" background="#fff" dpi="400"></bx:file>
+    </bx:export>
+  </defs>
+  <path d="M 13.045 47.331 L 50.659 12.066 L 50.496 71.367 M 30.009 49.633 L 86.955 49.597 L 53.774 87.934" fill="none" stroke-linecap="round" style="stroke-linejoin: bevel; transform-box: fill-box; transform-origin: 51.9085% 48.7322%; stroke: rgb(15, 68, 197); stroke-width: 10.5px;">
+    <title>plus</title>
+  </path>
+</svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
+@media (prefers-color-scheme: dark) { :root { filter: contrast(0.8333333333333334) brightness(1.7); } }
+</style></svg>

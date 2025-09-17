@@ -1,0 +1,3 @@
+- Add headers on homepage for sanctum/api token servers
+- Add more tools - Claude Desktop, ChatGPT, Le Chat, etc..
+- Let developers pick the available tools from the homepage (grid with them all checked 100% opacity, then click to uncheck, with easy 'groups' to disable all 'dev' tools, or disable all 'mobile' tools or whatever)
