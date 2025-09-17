@@ -106,43 +106,34 @@
 
             <div data-slot="card" class="bg-white dark:bg-[#161615] text-[#1b1b18] dark:text-[#EDEDEC] flex flex-col gap-6 border border-[#e3e3e0] dark:border-[#3E3E3A] py-6 shadow-sm rounded-xl mt-6">
                 <div data-slot="card-header" class="flex flex-col gap-1.5 px-6">
-                    <div data-slot="card-title" class="leading-none font-semibold text-xl">Share this server</div>
-                    <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Help others discover the {{ $name }} MCP server</div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div data-slot="card-title" class="leading-none font-semibold text-xl">Share these instructions</div>
+                            <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Help others discover the {{ $name }} MCP server</div>
+                        </div>
+                        <a href="{{ $shareUrl }}"><img src="{{ $badgeUrl }}" alt="AddMCP Badge" class="h-7"></a>
+                    </div>
                 </div>
 
-                <div data-slot="card-content" class="px-6 space-y-4">
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <button type="button"
-                                onclick="copyShareLink(this)"
-                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 bg-[#1b1b18] dark:bg-[#eeeeec] text-white dark:text-[#1b1b18] shadow-xs hover:bg-black dark:hover:bg-white h-9 px-4 py-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
-                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                            </svg>
-                            Copy AddMCP Link
-                        </button>
-
-                        <a href="https://twitter.com/intent/tweet?text={{ urlencode('Install ' . $name . ' MCP with one click: ' . url()->current()) }}"
-                           target="_blank"
-                           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 bg-[#f4f4f3] dark:bg-[#262625] text-[#1b1b18] dark:text-[#EDEDEC] shadow-xs hover:bg-[#e8e8e7] dark:hover:bg-[#363635] h-9 px-4 py-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
-                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
-                            </svg>
-                            Share to X
-                        </a>
-
-                        <a href="https://bsky.app/intent/compose?text={{ urlencode('Install ' . $name . ' MCP with one click: ' . url()->current()) }}"
-                           target="_blank"
-                           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 bg-[#f4f4f3] dark:bg-[#262625] text-[#1b1b18] dark:text-[#EDEDEC] shadow-xs hover:bg-[#e8e8e7] dark:hover:bg-[#363635] h-9 px-4 py-2">
-                            <svg width="24" height="24" viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" class="size-4 opacity-60">
-                                <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z" fill="currentColor"/>
-                            </svg>
-                            Share to Bluesky
-                        </a>
-
+                <div data-slot="card-content" class="px-6 space-y-6">
+                    <!-- Copy Link Section -->
+                    <div>
+                        <h4 class="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC] mb-3">Link</h4>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <code class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono break-all leading-relaxed flex-1">{{ $shareUrl }}</code>
+                            <button type="button"
+                                    onclick="copyToClipboard('{{ $shareUrl }}', this)"
+                                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 border border-[#e3e3e0] dark:border-[#3E3E3A] bg-white dark:bg-[#161615] shadow-xs hover:bg-[#f9f9f8] dark:hover:bg-[#1e1e1d] text-[#1b1b18] dark:text-[#EDEDEC] h-8 rounded-md px-3 sm:shrink-0 w-full sm:w-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+                                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
                         <button type="button"
                                 onclick="shareNative()"
-                                class="sm:hidden inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 bg-[#f4f4f3] dark:bg-[#262625] text-[#1b1b18] dark:text-[#EDEDEC] shadow-xs hover:bg-[#e8e8e7] dark:hover:bg-[#363635] h-9 px-4 py-2">
+                                class="sm:hidden mt-3 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 bg-[#f4f4f3] dark:bg-[#262625] text-[#1b1b18] dark:text-[#EDEDEC] shadow-xs hover:bg-[#e8e8e7] dark:hover:bg-[#363635] h-9 px-4 py-2 w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
                                 <circle cx="18" cy="5" r="3"></circle>
                                 <circle cx="6" cy="12" r="3"></circle>
@@ -152,6 +143,39 @@
                             </svg>
                             Share
                         </button>
+                    </div>
+
+                    <!-- Badge Section -->
+                    <div>
+                        <h4 class="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC] mb-3">Badge URL</h4>
+
+                        <div class="space-y-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                <code class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono grow overflow-x-scroll leading-relaxed block">{{ $badgeUrl }}</code>
+                                <button type="button"
+                                        onclick="copyToClipboard('{{ $badgeUrl }}', this)"
+                                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 border border-[#e3e3e0] dark:border-[#3E3E3A] bg-white dark:bg-[#161615] shadow-xs hover:bg-[#f9f9f8] dark:hover:bg-[#1e1e1d] text-[#1b1b18] dark:text-[#EDEDEC] h-8 rounded-md px-3 sm:shrink-0 w-full sm:w-auto">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+                                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+
+                            <div class="hidden mt-4 p-3 bg-[#f8f9fa] dark:bg-[#1a1a1a] rounded border border-[#e3e3e0] dark:border-[#3E3E3A]">
+                                <h5 class="text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC] mb-2">Customize your badge</h5>
+                                <p class="text-xs text-[#706f6c] dark:text-[#A1A09A] mb-2">Add query parameters to customize the badge:</p>
+                                <div class="space-y-1 text-xs font-mono">
+                                    <div><code class="text-[#0066cc]">?text=Custom%20Text</code> - Change the badge text</div>
+                                    <div><code class="text-[#0066cc]">?color=%23ff6b6b</code> - Change the background color</div>
+                                    <div><code class="text-[#0066cc]">?labelColor=%23555</code> - Change the logo section color</div>
+                                </div>
+                                <p class="text-xs text-[#706f6c] dark:text-[#A1A09A] mt-2">
+                                    Example: <code class="bg-[#f0f0f0] dark:bg-[#2a2a2a] px-1 rounded">{{ $badgeUrl }}?text=Install%20Now&color=%23success</code>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,7 +214,7 @@
                 // If clicking on the already open section, just close it
                 if (!isHidden) {
                     section.classList.add('opacity-0', 'max-h-0', '-mt-2');
-                    section.classList.remove('opacity-100', 'max-h-96', 'mt-0');
+                    section.classList.remove('opacity-100', 'max-h-screen', 'mt-0');
                     section.setAttribute('aria-hidden', 'true');
                     return;
                 }
@@ -198,13 +222,13 @@
                 // Hide all sections first
                 allSections.forEach(el => {
                     el.classList.add('opacity-0', 'max-h-0', '-mt-2');
-                    el.classList.remove('opacity-100', 'max-h-96', 'mt-0');
+                    el.classList.remove('opacity-100', 'max-h-screen', 'mt-0');
                     el.setAttribute('aria-hidden', 'true');
                 });
 
                 // Show the clicked section
                 section.classList.remove('opacity-0', 'max-h-0', '-mt-2');
-                section.classList.add('opacity-100', 'max-h-96', 'mt-0');
+                section.classList.add('opacity-100', 'max-h-screen', 'mt-0');
                 section.setAttribute('aria-hidden', 'false');
 
                 // Add active state to clicked button
@@ -226,29 +250,12 @@
                 });
             }
 
-            function copyShareLink(button) {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(() => {
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Link Copied!
-                    `;
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                    }, 2000);
-                }).catch((err) => {
-                    console.error('Failed to copy link: ', err);
-                });
-            }
 
             function shareNative() {
                 if (navigator.share) {
                     navigator.share({
-                        title: 'Add {{ $name }} MCP',
-                        text: 'Install {{ $name }} MCP with one click',
+                        title: 'Add the {{ $name }} MCP server',
+                        text: 'Guided installation of the {{ $name }} MCP server',
                         url: window.location.href
                     }).catch((error) => {
                         if (error.name !== 'AbortError') {
@@ -257,8 +264,8 @@
                     });
                 } else {
                     // Fallback to copy link if native share is not available
-                    const button = document.querySelector('[onclick*="shareNative"]');
-                    copyShareLink(button);
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url);
                 }
             }
         </script>
