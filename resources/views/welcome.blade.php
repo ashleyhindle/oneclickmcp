@@ -2,6 +2,9 @@
 
 @section('title', 'Create MCP Setup Page')
 @section('description', 'Generate one-click installation links for your MCP server. Support for Cursor, VS Code, Claude Code, and more.')
+@section('og:title', 'Create MCP Setup Page')
+@section('og:subtitle', 'Guided installation for your favorite AI agent')
+@section('og:description', 'Generate one-click installation links for your MCP server. Support for Cursor, VS Code, Claude Code, and more.')
 
 @section('content')
         <div class="w-full lg:max-w-2xl flex flex-col gap-y-4">
