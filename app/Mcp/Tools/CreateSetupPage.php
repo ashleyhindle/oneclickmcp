@@ -9,24 +9,18 @@ use Laravel\Mcp\Server\Tool;
 
 class CreateSetupPage extends Tool
 {
-    /**
-     * The tool's description.
-     */
-    protected string $description = 'Generate installation instructions and links for an MCP server';
+    protected string $description = 'Generate installation instructions and links for a HTTP Streaming MCP server';
 
-    /**
-     * Handle the tool request.
-     */
     public function handle(Request $request): Response
     {
         $validated = $request->validate(
             [
-                'name' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9-]+$/'],
+                'name' => ['required', 'string', 'max:255', 'not_regex:/[\'"]/'],
                 'url' => ['required', 'url', 'max:2000'],
             ],
             [
                 'name.required' => 'You must provide a server name.',
-                'name.regex' => 'The server name must be lowercase with hyphens only (e.g., "my-mcp-server").',
+                'name.not_regex' => 'The server name must not contain quotes.',
                 'name.max' => 'The server name must not exceed 255 characters.',
                 'url.required' => 'You must provide a server URL.',
                 'url.url' => 'Please provide a valid URL starting with https:// or http://',
@@ -37,21 +31,17 @@ class CreateSetupPage extends Tool
         $name = $validated['name'];
         $url = $validated['url'];
 
-        // Encode the URL for use in the path
-        $encodedUrl = urlencode($url);
-
-        // Generate the setup URL using the app URL
-        $setupUrl = config('app.url') . "/addmcp/{$encodedUrl}?name={$name}";
+        $setupUrl = route('install', ['name' => $name, 'url' => $url]);
 
         return Response::text(
-            "Successfully generated setup page!\n\n" .
-            "Share this URL with users to install your MCP server:\n" .
-            $setupUrl . "\n\n" .
-            "This link will provide one-click installation instructions for:\n" .
-            "- Claude Code\n" .
-            "- Cursor\n" .
-            "- VS Code\n" .
-            "- And other MCP-compatible clients"
+            "Successfully generated setup page!\n\n".
+            "Share this URL with users to install your MCP server:\n".
+            $setupUrl."\n\n".
+            "This link will provide one-click installation instructions for:\n".
+            "- Claude Code\n".
+            "- Cursor\n".
+            "- VS Code\n".
+            '- And other MCP-compatible clients'
         );
     }
 
@@ -64,7 +54,7 @@ class CreateSetupPage extends Tool
     {
         return [
             'name' => $schema->string()
-                ->description('The server name (lowercase with hyphens, e.g., "my-mcp-server")')
+                ->description('The server name')
                 ->required(),
 
             'url' => $schema->string()
