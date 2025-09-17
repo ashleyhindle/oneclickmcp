@@ -7,15 +7,10 @@
 @section('og:description', 'Install the ' . $name . ' MCP server with one click in your favorite AI agent.')
 
 @section('content')
-        <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-3">
-            <div class="mb-12 text-center">
-                <h1 class="text-4xl font-bold mb-3">Add the '{{ $name }}' MCP</h1>
-                <p class="text-[#706f6c] dark:text-[#A1A09A]">Guided installation for your favorite AI agent</p>
-            </div>
-
+        <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
             <div data-slot="card" class="bg-white dark:bg-[#161615] text-[#1b1b18] dark:text-[#EDEDEC] flex flex-col gap-6 border border-[#e3e3e0] dark:border-[#3E3E3A] py-6 shadow-sm rounded-xl">
                 <div data-slot="card-header" class="flex flex-col gap-1.5 px-6">
-                    <div data-slot="card-title" class="leading-none font-semibold text-xl">Quick Installation</div>
+                    <div data-slot="card-title" class="leading-none font-semibold text-xl">Quick install of the '{{ $name }}' MCP server</div>
                     <div class="text-sm text-[#706f6c] dark:text-[#A1A09A] break-all">{{ $url }}</div>
                 </div>
 
@@ -108,7 +103,7 @@
                 <div data-slot="card-header" class="flex flex-col gap-1.5 px-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <div data-slot="card-title" class="leading-none font-semibold text-xl">Share these instructions</div>
+                            <div data-slot="card-title" class="leading-none font-semibold text-xl">Share installation instructions</div>
                             <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Help others discover the {{ $name }} MCP server</div>
                         </div>
                         <a href="{{ $shareUrl }}"><img src="{{ $badgeUrl }}" alt="AddMCP Badge" class="h-7"></a>
@@ -180,7 +175,7 @@
                 </div>
             </div>
 
-            <div class="mt-12 text-center">
+            <div class="mt-8 text-center">
                 <div class="flex items-center justify-center gap-2 mb-2">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
                         <path d="M 13.045 47.331 L 50.659 12.066 L 50.496 71.367 M 30.009 49.633 L 86.955 49.597 L 53.774 87.934"
