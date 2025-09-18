@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\McpConfigRequest;
+use Illuminate\Support\Str;
 
 class McpController extends Controller
 {
@@ -79,7 +80,7 @@ class McpController extends Controller
 
     private function generateClaudeCommand(string $name, string $url): string
     {
-        return sprintf('claude mcp add -s user -t http "%s" "%s"', $name, $url);
+        return sprintf('claude mcp add -s user -t http "%s" "%s"', Str::kebab($name), $url);
     }
 
     public function badge(string $name, string $url)
