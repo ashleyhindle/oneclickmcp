@@ -8,6 +8,43 @@
 
 @section('content')
         <div class="w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+            @if($hasVariables)
+            <div data-slot="card" class="bg-white dark:bg-[#161615] text-[#1b1b18] dark:text-[#EDEDEC] flex flex-col gap-6 border border-[#e3e3e0] dark:border-[#3E3E3A] py-6 shadow-sm rounded-xl mb-6">
+                <div data-slot="card-header" class="flex flex-col gap-1.5 px-6">
+                    <div data-slot="card-title" class="leading-none font-semibold text-xl">Configuration</div>
+                    <div class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Enter your personal values to replace placeholders.</div>
+                </div>
+
+                <div data-slot="card-content" class="px-6 space-y-4">
+                    @foreach($detectedVariables as $variable)
+                    <div class="space-y-2">
+                        <label for="var-{{ $variable }}" class="block text-sm font-medium text-[#1b1b18] dark:text-[#EDEDEC]">
+                            {{ $variable }}
+                        </label>
+                        <input
+                            type="text"
+                            id="var-{{ $variable }}"
+                            data-variable="{{ $variable }}"
+                            placeholder="Enter your {{ strtolower(str_replace('_', ' ', $variable)) }}"
+                            class="variable-input w-full px-4 py-2 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg bg-white dark:bg-[#1b1b18] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors placeholder-[#A1A09A] text-sm"
+                        />
+                    </div>
+                    @endforeach
+
+                    <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p class="text-xs text-blue-700 dark:text-blue-300">
+                                Your values are processed entirely in your browser for security. The installation links below will update automatically as you type.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <div data-slot="card" class="bg-white dark:bg-[#161615] text-[#1b1b18] dark:text-[#EDEDEC] flex flex-col gap-6 border border-[#e3e3e0] dark:border-[#3E3E3A] py-6 shadow-sm rounded-xl">
                 <div data-slot="card-header" class="flex flex-col gap-1.5 px-6">
                     <div data-slot="card-title" class="leading-none font-semibold text-xl">Quick install of the '{{ $name }}' MCP server</div>
@@ -64,7 +101,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <code class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono break-all leading-relaxed flex-1">{{ $claudeCommand }}</code>
                             <button type="button"
-                                    onclick="copyToClipboard('{{ $claudeCommand }}', this)"
+                                    onclick="copyToClipboard(null, this)"
                                     class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 border border-[#e3e3e0] dark:border-[#3E3E3A] bg-white dark:bg-[#161615] shadow-xs hover:bg-[#f9f9f8] dark:hover:bg-[#1e1e1d] text-[#1b1b18] dark:text-[#EDEDEC] h-8 rounded-md px-3 sm:shrink-0 w-full sm:w-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
                                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
@@ -90,9 +127,9 @@
                                 </button>
                             </div>
 
-                            <div class="mt-4 hidden">
+                            <div class="mt-4">
                                 <h4 class="text-sm font-medium mb-2">Manual Configuration</h4>
-                                <pre class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono overflow-x-auto">{{ $configJson }}</pre>
+                                <pre class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono overflow-x-auto">{{ str_replace('\\', '', $configJson) }}</pre>
                             </div>
                         </div>
                     </div>
@@ -117,7 +154,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <code class="text-xs bg-[#f9f9f8] dark:bg-[#1b1b18] p-3 rounded border border-[#e3e3e0] dark:border-[#3E3E3A] font-mono break-all leading-relaxed flex-1">{{ $shareUrl }}</code>
                             <button type="button"
-                                    onclick="copyToClipboard('{{ $shareUrl }}', this)"
+                                    onclick="copyToClipboard(null, this)"
                                     class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 border border-[#e3e3e0] dark:border-[#3E3E3A] bg-white dark:bg-[#161615] shadow-xs hover:bg-[#f9f9f8] dark:hover:bg-[#1e1e1d] text-[#1b1b18] dark:text-[#EDEDEC] h-8 rounded-md px-3 sm:shrink-0 w-full sm:w-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
                                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
@@ -195,6 +232,96 @@
 
 @push('scripts')
         <script>
+            @if($hasVariables)
+            // Store original configuration data
+            const serverName = @json($name);
+            const serverUrl = @json($url);
+            const headerTemplate = @json($headers ?? []);
+            const detectedVariables = @json($detectedVariables);
+            const variableValues = {};
+
+            // Initialize variable values
+            detectedVariables.forEach(variable => {
+                variableValues[variable] = '';
+            });
+
+            function updateAllLinks() {
+                // Create new headers with replaced values
+                const updatedHeaders = {};
+                for (const [key, value] of Object.entries(headerTemplate)) {
+                    let updatedValue = value;
+                    for (const [variable, replacement] of Object.entries(variableValues)) {
+                        if (replacement) {
+                            updatedValue = updatedValue.replace(new RegExp(`\\{\\{${variable}\\}\\}`, 'g'), replacement);
+                        }
+                    }
+                    updatedHeaders[key] = updatedValue;
+                }
+
+                // Encode headers for URL
+                const encodedHeaders = btoa(JSON.stringify(updatedHeaders));
+
+                // Update config object
+                const config = {
+                    name: serverName,
+                    type: 'http',
+                    url: serverUrl,
+                    headers: updatedHeaders
+                };
+
+                // Update Cursor deep link
+                const cursorConfig = {...config};
+                delete cursorConfig.type;
+                const cursorUrl = `cursor://anysphere.cursor-deeplink/mcp/install?name=${encodeURIComponent(serverName)}&config=${encodeURIComponent(btoa(JSON.stringify(cursorConfig)))}`;
+                const cursorLink = document.querySelector('a[href*="cursor://"]');
+                if (cursorLink) {
+                    cursorLink.href = cursorUrl;
+                }
+
+                // Update VS Code deep links
+                const vscodeUrl = `vscode:mcp/install?${encodeURIComponent(JSON.stringify(config))}`;
+                const vscodeLink = document.querySelector('a[href*="vscode:mcp"]');
+                if (vscodeLink) {
+                    vscodeLink.href = vscodeUrl;
+                }
+
+
+                // Update Claude command
+                let claudeCommand = `claude mcp add -s user -t http "${serverName.toLowerCase().replace(/\s+/g, '-')}" "${serverUrl}"`;
+                for (const [key, value] of Object.entries(updatedHeaders)) {
+                    const escapedValue = value.replace(/"/g, '\\"');
+                    claudeCommand += ` --header "${key}: ${escapedValue}"`;
+                }
+                const claudeCode = document.querySelector('#claude-section code');
+                if (claudeCode) {
+                    claudeCode.textContent = claudeCommand;
+                }
+
+                // Update share URL
+                const shareUrl = `${window.location.pathname}?headers=${encodeURIComponent(encodedHeaders)}`;
+                const shareCode = document.querySelector('code:not(#claude-section code)');
+                if (shareCode && shareCode.textContent.includes(window.location.pathname)) {
+                    shareCode.textContent = window.location.origin + shareUrl;
+                }
+
+                // Update config JSON display
+                const configDisplay = document.querySelector('pre');
+                if (configDisplay) {
+                    configDisplay.textContent = JSON.stringify(config, null, 4);
+                }
+            }
+
+            // Add event listeners to variable inputs
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.variable-input').forEach(input => {
+                    input.addEventListener('input', function() {
+                        const variable = this.dataset.variable;
+                        variableValues[variable] = this.value;
+                        updateAllLinks();
+                    });
+                });
+            });
+            @endif
             function toggleSection(sectionId, button) {
                 const section = document.getElementById(sectionId);
                 const isHidden = section.classList.contains('opacity-0');
@@ -231,6 +358,17 @@
             }
 
             function copyToClipboard(text, button) {
+                // If text is null, find the adjacent code element
+                if (text === null) {
+                    const container = button.closest('.flex, .space-y-3, .space-y-4');
+                    const codeElement = container?.querySelector('code');
+                    if (codeElement) {
+                        text = codeElement.textContent;
+                    } else {
+                        return;
+                    }
+                }
+
                 navigator.clipboard.writeText(text).then(() => {
                     const originalHTML = button.innerHTML;
                     button.innerHTML = `

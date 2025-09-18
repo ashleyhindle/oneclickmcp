@@ -14,12 +14,39 @@ class McpController extends Controller
 
     public function generate(McpConfigRequest $request)
     {
-        ['name' => $name, 'url' => $url] = $request->validated();
+        $validated = $request->validated();
+        $name = $validated['name'];
+        $url = $validated['url'];
+        $headers = $this->processHeaders($validated['headers'] ?? []);
 
-        return redirect()->route('install', [
+        $routeParams = [
             'name' => $name,
             'url' => $url,
-        ]);
+        ];
+
+        // Build the URL with query parameters if headers exist
+        $redirectUrl = route('install', $routeParams);
+        if (! empty($headers)) {
+            $redirectUrl .= '?headers='.urlencode(base64_encode(json_encode($headers)));
+        }
+
+        return redirect($redirectUrl);
+    }
+
+    private function processHeaders(?array $headers): array
+    {
+        if (empty($headers)) {
+            return [];
+        }
+
+        $processed = [];
+        foreach ($headers as $header) {
+            if (! empty($header['key']) && ! empty($header['value'])) {
+                $processed[$header['key']] = $header['value'];
+            }
+        }
+
+        return $processed;
     }
 
     public function install(string $name, string $url)
@@ -30,21 +57,52 @@ class McpController extends Controller
             return redirect()->route('home')->withErrors(['url' => 'Invalid URL format']);
         }
 
+        // Decode headers from query parameter if provided
+        $decodedHeaders = [];
+        $headersParam = request()->query('headers');
+        if ($headersParam) {
+            try {
+                $decodedHeaders = json_decode(base64_decode($headersParam), true) ?: [];
+            } catch (\Exception $e) {
+                $decodedHeaders = [];
+            }
+        }
+
+        // Detect variables in headers (pattern: {{VARIABLE_NAME}})
+        $detectedVariables = [];
+        $hasVariables = false;
+        foreach ($decodedHeaders as $key => $value) {
+            if (preg_match_all('/\{\{([^}]+)\}\}/', $value, $matches)) {
+                $hasVariables = true;
+                foreach ($matches[1] as $variable) {
+                    $detectedVariables[$variable] = '';
+                }
+            }
+        }
+
         // Generate configuration JSON
         $config = [
             'name' => $name,
-            'type' => 'http',
             'url' => $url,
         ];
+
+        if (! empty($decodedHeaders)) {
+            $config['headers'] = $decodedHeaders;
+        }
 
         // Generate deep links
         $cursorUrl = $this->generateCursorDeepLink($name, $config);
         $vscodeUrl = $this->generateVscodeDeepLink($config);
-        $vscodeInsidersUrl = $this->generateVscodeInsidersDeepLink($config);
-        $claudeCommand = $this->generateClaudeCommand($name, $url);
+        $claudeCommand = $this->generateClaudeCommand($name, $url, $decodedHeaders);
 
         // Generate badge URL
         $badgeUrl = route('badge', ['name' => $name, 'url' => $url]);
+
+        // Generate share URL with headers if present
+        $shareUrl = url()->current();
+        if (! empty($decodedHeaders) && $headersParam) {
+            $shareUrl .= '?headers='.$headersParam;
+        }
 
         return view('results', [
             'name' => $name,
@@ -52,17 +110,20 @@ class McpController extends Controller
             'config' => $config,
             'cursorUrl' => $cursorUrl,
             'vscodeUrl' => $vscodeUrl,
-            'vscodeInsidersUrl' => $vscodeInsidersUrl,
             'claudeCommand' => $claudeCommand,
             'configJson' => json_encode($config, JSON_PRETTY_PRINT),
             'badgeUrl' => $badgeUrl,
-            'shareUrl' => url()->current(),
+            'shareUrl' => $shareUrl,
+            'headers' => $decodedHeaders,
+            'headersParam' => $headersParam,
+            'hasVariables' => $hasVariables,
+            'detectedVariables' => array_keys($detectedVariables),
+            'headersJson' => json_encode($decodedHeaders),
         ]);
     }
 
     private function generateCursorDeepLink(string $name, array $config): string
     {
-        unset($config['type']);
         $encodedConfig = base64_encode(json_encode($config));
 
         return 'cursor://anysphere.cursor-deeplink/mcp/install?name='.urlencode($name).'&config='.urlencode($encodedConfig);
@@ -70,17 +131,21 @@ class McpController extends Controller
 
     private function generateVscodeDeepLink(array $config): string
     {
+	$config['type'] = 'http';
         return 'vscode:mcp/install?'.urlencode(json_encode($config));
     }
 
-    private function generateVscodeInsidersDeepLink(array $config): string
+    private function generateClaudeCommand(string $name, string $url, array $headers = []): string
     {
-        return 'vscode-insiders:mcp/install?'.urlencode(json_encode($config));
-    }
+        $command = sprintf('claude mcp add -s user -t http "%s" "%s"', Str::kebab($name), $url);
 
-    private function generateClaudeCommand(string $name, string $url): string
-    {
-        return sprintf('claude mcp add -s user -t http "%s" "%s"', Str::kebab($name), $url);
+        foreach ($headers as $key => $value) {
+            // Escape double quotes in the value
+            $escapedValue = str_replace('"', '\\"', $value);
+            $command .= sprintf(' --header "%s: %s"', $key, $escapedValue);
+        }
+
+        return $command;
     }
 
     public function badge(string $name, string $url)

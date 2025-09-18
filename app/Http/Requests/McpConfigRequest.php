@@ -16,6 +16,9 @@ class McpConfigRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|not_regex:/[\'"]/',
             'url' => 'required|url|max:1000|regex:/^https?:\/\//',
+            'headers' => 'nullable|array',
+            'headers.*.key' => 'required_with:headers.*.value|string|max:255|regex:/^[a-zA-Z0-9\-_]+$/',
+            'headers.*.value' => 'required_with:headers.*.key|string|max:1000',
         ];
     }
 
@@ -32,6 +35,9 @@ class McpConfigRequest extends FormRequest
             'url.required' => 'Server URL is required.',
             'url.url' => 'Please enter a valid URL.',
             'url.regex' => 'URL must start with http:// or https://',
+            'headers.*.key.required_with' => 'Header name is required when value is provided.',
+            'headers.*.key.regex' => 'Header name can only contain letters, numbers, hyphens, and underscores.',
+            'headers.*.value.required_with' => 'Header value is required when name is provided.',
         ];
     }
 }

@@ -12,6 +12,9 @@
         <!-- Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        <!-- Alpine.js -->
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
         <!-- SEO Tags -->
         <meta name="description" content="@yield('description', 'Generate one-click installation links for your MCP server across different IDEs and tools')">
         <meta property="og:title" content="@yield('og:title', 'One-Click MCP')">
